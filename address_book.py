@@ -79,7 +79,6 @@ class Record:
         bday = self.birthday.value.strftime("%d.%m.%Y") if self.birthday else "N/A"
         return f"Contact name: {self.name.value}, phones: {phones}, birthday: {bday}"
 
-
 class AddressBook(UserDict):
     def add_record(self, record):
         self.data[record.name.value] = record
@@ -101,9 +100,9 @@ class AddressBook(UserDict):
                     bday = bday.replace(year=today.year + 1)
                 delta = (bday - today).days
                 if 0 <= delta <= 7:
-                    if bday.weekday() == 5:
+                    if bday.weekday() == 5:  # Saturday
                         bday += timedelta(days=2)
-                    elif bday.weekday() == 6:
+                    elif bday.weekday() == 6:  # Sunday
                         bday += timedelta(days=1)
                     upcoming.append({
                         "name": record.name.value,
@@ -143,7 +142,7 @@ def show_phones(args, book):
     name = args[0]
     record = book.find(name)
     if record:
-        return ", ".join(p.value for p in record.phones)
+        return ", ".join(p.value for p in record.phones) if record.phones else "No phones saved."
     return "Contact not found."
 
 @input_error
